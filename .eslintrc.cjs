@@ -37,6 +37,7 @@ module.exports = {
     ],
     "arrow-body-style": "off",
     "import/prefer-default-export": "off",
+    "import/extensions": "off",
     "react/prop-types": "off",
     "react/require-default-props": "off",
     "react/jsx-props-no-spreading": "off",
