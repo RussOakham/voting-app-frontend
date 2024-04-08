@@ -1,30 +1,18 @@
 import { useTransition } from 'react';
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 
 import { Shell } from './components/layouts/shells/shell';
 import { Button } from './components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from './components/ui/form';
 import { Input } from './components/ui/input';
+import { CreatePoll, createPollSchema } from './types/poll.type';
 
 import './App.css'
-
-const createPollSchema = z.object({
-  question: z.string({
-    required_error: "Question is required",
-  }),
-  options: z
-    .string({
-      required_error: "Options are required",
-    }).array()
-    .min(2, "At least two options are required")
-    .max(5, "At most 5 options are allowed"),
-})
-
-type CreatePoll = z.infer<typeof createPollSchema>
+import { useGetPollsQuery } from './lib/react-query/polls/useGetPollsQuery';
 
 function App() {
+  const { data: polls, isError, isPending: isPollsPending, error} = useGetPollsQuery()
   const [isPending, startTransition] = useTransition()
 
   const form = useForm<CreatePoll>({
@@ -40,10 +28,8 @@ function App() {
 
   const onSubmit = (data: CreatePoll) => {
     const submitData = async () => {
-      console.log(data)
-  
       try {
-        const result = await fetch('http://localhost:8080/polls', {
+        const result = await fetch('http://localhost:8080/create-poll', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -52,17 +38,29 @@ function App() {
         })
     
         console.log(result)
-      } catch (err) {
+      } catch (err: unknown) {
         console.error(err)
+        throw new Error(`Error creating poll: ${JSON.stringify(err)}`)
       }
     }
   
     startTransition(() => {
       submitData().catch((err: unknown) => {
         console.error(err)
+        throw new Error(`Error creating poll: ${JSON.stringify(err)}`)
       });
     })
   }
+
+  if (isPollsPending || !polls) {
+    return <p>Loading...</p>
+  }
+
+  if (isError) {
+    return <p>Error: {error.message}</p>
+  }
+
+  console.log(polls.Items)
 
   return (
     <Shell variant='zero-vertical-padding' className='max-w-6xl'>
