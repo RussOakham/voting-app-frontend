@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query"
 import { z }  from 'zod'
 import { ValidationError, ZodError, fromZodError} from 'zod-validation-error'
 
-import { GetPolls, getPollsSchema } from "@/types/poll.type"
+import { GetPolls, getPollsSchema, Poll } from "@/types/poll.type"
 
 const { baseUrl, getPolls} = endpoints
 
@@ -19,7 +19,7 @@ const zodParse = <T extends z.ZodTypeAny>(schema: T, data: unknown): z.infer<T> 
 export const useGetPollsQuery = () => {
     const query = useQuery({
         queryKey: ['polls'],
-        queryFn: async (): Promise<GetPolls> => {
+        queryFn: async (): Promise<Poll[]> => {
             const response = await fetch(`${baseUrl}${getPolls}`, {
                 method: 'GET',
                 headers: {
@@ -34,7 +34,7 @@ export const useGetPollsQuery = () => {
 
             const data = await response.json() as Promise<GetPolls>
 
-            return zodParse(getPollsSchema, data)
+            return zodParse(getPollsSchema, data).Items
         },
     })
 

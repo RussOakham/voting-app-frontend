@@ -60,7 +60,7 @@ function App() {
     return <p>Error: {error.message}</p>
   }
 
-  console.log(polls.Items)
+  console.log(polls)
 
   return (
     <Shell variant='zero-vertical-padding' className='max-w-6xl'>
