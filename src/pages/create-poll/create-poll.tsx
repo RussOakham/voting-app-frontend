@@ -44,6 +44,7 @@ const CreatePoll: React.FC = () => {
 				{ id: id2, text: '' },
 			],
 			votes: [],
+			createdBy: 'user-1',
 		},
 	})
 	const { fields, append, remove } = useFieldArray({

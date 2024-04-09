@@ -27,8 +27,6 @@ export const createPollSchema = z.object({
 		.min(2, 'At least two options are required')
 		.max(5, 'At most 5 options are allowed'),
 	votes: voteSchema.array(),
-	createdAt: z.string().trim().min(1, 'createdAt is required'),
-	updatedAt: z.string().trim().min(1, 'updatedAt is required'),
 	createdBy: z.string().trim().min(1, 'createdBy is required'),
 })
 
@@ -36,7 +34,10 @@ export type CreatePoll = z.infer<typeof createPollSchema>
 
 export const pollSchema = createPollSchema.extend({
 	id: z.string(),
+	createdAt: z.string().trim().min(1, 'createdAt is required'),
+	updatedAt: z.string().trim().min(1, 'updatedAt is required'),
 })
+
 export type Poll = z.infer<typeof pollSchema>
 
 export const metadataSchema = z.object({
