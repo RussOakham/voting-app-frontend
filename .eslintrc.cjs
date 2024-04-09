@@ -22,7 +22,7 @@ module.exports = {
     project: ["./tsconfig.json", "./tsconfig.node.json"],
     tsconfigRootDir: __dirname,
   },
-  plugins: ["react-refresh", "simple-import-sort", "prettier-plugin-tailwindcss"],
+  plugins: ["react-refresh", "simple-import-sort"],
   rules: {
     "react-refresh/only-export-components": [
       "warn",
