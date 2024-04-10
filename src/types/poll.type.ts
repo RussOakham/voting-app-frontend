@@ -6,6 +6,7 @@ const voteSchema = z.object({
 	id: z.string(),
 	option: z.string(),
 	user: z.string(),
+	createdAt: z.string(),
 })
 
 export type Vote = z.infer<typeof voteSchema>
@@ -51,14 +52,18 @@ export const getPollsSchema = z.object({
 
 export type GetPolls = z.infer<typeof getPollsSchema>
 
-export const submitVoteSchema = z.object({
+export const submittedVoteSchema = z.object({
 	userId: z.string(),
 	optionId: z.string(),
 	optionText: z.string(),
 })
 
-export const submitVoteApiSchema = pollSchema.extend({
-	submittedVote: submitVoteSchema,
+export type SubmittedVote = z.infer<typeof submittedVoteSchema>
+
+export const submitVoteSchema = z.object({
+	pollId: z.string(),
+	votes: voteSchema.array(),
+	submittedVote: submittedVoteSchema,
 })
 
-export type SubmitVote = z.infer<typeof submitVoteApiSchema>
+export type SubmitVote = z.infer<typeof submitVoteSchema>

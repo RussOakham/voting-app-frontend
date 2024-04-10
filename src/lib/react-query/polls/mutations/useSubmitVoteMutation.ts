@@ -10,13 +10,18 @@ export const useSubmitVoteMutation = () => {
 		mutationFn: async (data: SubmitVote) => {
 			const polls = queryClient.getQueryData<Poll[]>(['polls'])
 
-			const poll = polls?.find((p) => p.id === data.id)
+			const poll = polls?.find((p) => p.id === data.pollId)
 
 			if (!poll) {
 				throw new Error('Could not find poll')
 			}
 
-			await submitVote(data)
+			const response = await submitVote(data)
+
+			return response.json()
+		},
+		onError: (error) => {
+			return error
 		},
 		onSettled: async () => {
 			await queryClient.invalidateQueries({

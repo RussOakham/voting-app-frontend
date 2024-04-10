@@ -5,9 +5,8 @@ import { endpoints } from '../endpoints'
 const { baseUrl, submitVote: submitVoteUrl } = endpoints
 
 export const submitVote = async (data: SubmitVote) => {
-	console.log('submitVote', data)
 	try {
-		const result = await fetch(`${baseUrl}${submitVoteUrl}`, {
+		const response = await fetch(`${baseUrl}${submitVoteUrl}`, {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -15,13 +14,22 @@ export const submitVote = async (data: SubmitVote) => {
 			body: JSON.stringify(data),
 		})
 
-		if (!result.ok) {
-			throw new Error('Error submitting vote')
+		if (!response.ok) {
+			interface ErrorResponse {
+				message: string
+			}
+
+			const error = await response.text().then((text) => text)
+			const jsonError = JSON.parse(error) as ErrorResponse
+
+			return await Promise.reject(new Error(jsonError.message))
 		}
 
-		return result
+		return response
 	} catch (err: unknown) {
-		console.error(err)
-		throw new Error(`Error submitting vote: ${JSON.stringify(err)}`)
+		if (err instanceof Error) {
+			throw err
+		}
+		throw new Error('[submit-vote]: Unknown error')
 	}
 }

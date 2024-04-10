@@ -61,14 +61,28 @@ function Polls() {
 									disabled={isPending}
 									onClick={() => {
 										startTransition(() => {
-											submitVoteMutation.mutate({
-												...option,
-												submittedVote: {
-													userId: 'user-123',
-													optionId: answer.id,
-													optionText: answer.text,
+											submitVoteMutation.mutate(
+												{
+													pollId: option.id,
+													votes: option.votes,
+													submittedVote: {
+														userId: '123',
+														optionId: answer.id,
+														optionText: answer.text,
+													},
 												},
-											})
+												{
+													onSuccess: () => {
+														console.log('Vote submitted')
+													},
+													onError: () => {
+														// eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
+														console.error(
+															`[submit-vote error]: ${submitVoteMutation.error?.message ?? ''}`,
+														)
+													},
+												},
+											)
 										})
 									}}
 								>
