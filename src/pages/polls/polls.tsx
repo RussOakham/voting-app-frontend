@@ -1,3 +1,4 @@
+import { useTransition } from 'react'
 import { LuPlusCircle } from 'react-icons/lu'
 import { Link } from 'react-router-dom'
 
@@ -10,9 +11,12 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card'
-import { useGetPollsQuery } from '@/lib/react-query/polls/useGetPollsQuery'
+import { useSubmitVoteMutation } from '@/lib/react-query/polls/mutations/useSubmitVoteMutation'
+import { useGetPollsQuery } from '@/lib/react-query/polls/queries/useGetPollsQuery'
 
 function Polls() {
+	const [isPending, startTransition] = useTransition()
+	const submitVoteMutation = useSubmitVoteMutation()
 	const {
 		data: polls,
 		isError,
@@ -54,6 +58,19 @@ function Polls() {
 									key={answer.id}
 									variant="vote"
 									className="relative bg-gradient-to-r from-purple-300 from-50% to-slate-200 to-50%"
+									disabled={isPending}
+									onClick={() => {
+										startTransition(() => {
+											submitVoteMutation.mutate({
+												...option,
+												submittedVote: {
+													userId: 'user-123',
+													optionId: answer.id,
+													optionText: answer.text,
+												},
+											})
+										})
+									}}
 								>
 									{answer.text}
 									<span className="pointer-events-none absolute right-3">

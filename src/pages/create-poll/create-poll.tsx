@@ -1,6 +1,7 @@
 import { useTransition } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { LuMinusCircle, LuPlusCircle } from 'react-icons/lu'
+import { useNavigate } from 'react-router-dom'
 import { DevTool } from '@hookform/devtools'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { v4 as uuid } from 'uuid'
@@ -22,6 +23,7 @@ import {
 	FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { useCreatePollMutation } from '@/lib/react-query/polls/mutations/useCreatePollMutation'
 import {
 	CreatePoll as CreatePollType,
 	createPollSchema,
@@ -31,6 +33,8 @@ const isDev = import.meta.env.MODE === 'development'
 
 const CreatePoll: React.FC = () => {
 	const [isPending, startTransition] = useTransition()
+	const navigate = useNavigate()
+	const createPollMutation = useCreatePollMutation()
 
 	const id1 = uuid()
 	const id2 = uuid()
@@ -53,29 +57,13 @@ const CreatePoll: React.FC = () => {
 	})
 
 	const onSubmit = (data: CreatePollType) => {
-		const submitData = async () => {
-			console.log(data)
-			try {
-				const result = await fetch('http://localhost:8080/create-poll', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify(data),
-				})
-
-				console.log(result)
-			} catch (err: unknown) {
-				console.error(err)
-				throw new Error(`Error creating poll: ${JSON.stringify(err)}`)
-			}
-		}
-
 		startTransition(() => {
-			submitData().catch((err: unknown) => {
-				console.error(err)
-				throw new Error(`Error creating poll: ${JSON.stringify(err)}`)
+			createPollMutation.mutate(data, {
+				onError: (error) => {
+					console.error(error)
+				},
 			})
+			navigate('/polls')
 		})
 	}
 
@@ -140,7 +128,6 @@ const CreatePoll: React.FC = () => {
 															placeholder={`Option ${(index + 1).toString()}`}
 															className="pr-12"
 															autoComplete="off"
-															defaultValue={option.text}
 															{...field}
 														/>
 														<Button
