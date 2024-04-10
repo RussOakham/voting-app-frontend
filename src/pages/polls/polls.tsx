@@ -11,11 +11,13 @@ import {
 	CardHeader,
 	CardTitle,
 } from '@/components/ui/card'
+import { useToast } from '@/components/ui/use-toast'
 import { useSubmitVoteMutation } from '@/lib/react-query/polls/mutations/useSubmitVoteMutation'
 import { useGetPollsQuery } from '@/lib/react-query/polls/queries/useGetPollsQuery'
 
 function Polls() {
 	const [isPending, startTransition] = useTransition()
+	const { toast } = useToast()
 	const submitVoteMutation = useSubmitVoteMutation()
 	const {
 		data: polls,
@@ -48,50 +50,72 @@ function Polls() {
 					<Card key={option.id} className="max-w-5xl">
 						<CardHeader>
 							<CardTitle>{polls[0]?.question}</CardTitle>
-							<CardDescription>
-								Cast your vote by selecting an option below
-							</CardDescription>
+							<div className="flex justify-between">
+								<CardDescription>
+									Cast your vote by selecting an option below
+								</CardDescription>
+								<CardDescription>
+									Total votes: {option.votes.length}
+								</CardDescription>
+							</div>
 						</CardHeader>
 						<CardContent className="flex flex-col gap-2">
-							{option.options.map((answer) => (
-								<Button
-									key={answer.id}
-									variant="vote"
-									className="relative bg-gradient-to-r from-purple-300 from-50% to-slate-200 to-50%"
-									disabled={isPending}
-									onClick={() => {
-										startTransition(() => {
-											submitVoteMutation.mutate(
-												{
-													pollId: option.id,
-													votes: option.votes,
-													submittedVote: {
-														userId: '123',
-														optionId: answer.id,
-														optionText: answer.text,
+							{option.options.map((answer) => {
+								const optionVotes = option.votes.filter(
+									(vote) => vote.option === answer.text,
+								).length
+
+								const percentage = (optionVotes / option.votes.length) * 100
+
+								return (
+									<Button
+										key={answer.id}
+										variant="vote"
+										className="relative p-0"
+										disabled={isPending}
+										onClick={() => {
+											startTransition(() => {
+												submitVoteMutation.mutate(
+													{
+														pollId: option.id,
+														votes: option.votes,
+														submittedVote: {
+															userId: '123',
+															optionId: answer.id,
+															optionText: answer.text,
+														},
 													},
-												},
-												{
-													onSuccess: () => {
-														console.log('Vote submitted')
+													{
+														onSuccess: () => {
+															toast({
+																title: 'Vote submitted',
+																description: 'Your vote has been submitted',
+															})
+														},
+														onError: () => {
+															toast({
+																title: 'Error submitting vote',
+																description: `There was an error submitting your vote ${submitVoteMutation.error?.message ? `: ${submitVoteMutation.error.message}` : ''}`,
+															})
+														},
 													},
-													onError: () => {
-														// eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
-														console.error(
-															`[submit-vote error]: ${submitVoteMutation.error?.message ?? ''}`,
-														)
-													},
-												},
-											)
-										})
-									}}
-								>
-									{answer.text}
-									<span className="pointer-events-none absolute right-3">
-										25 - 50%
-									</span>
-								</Button>
-							))}
+												)
+											})
+										}}
+									>
+										<div
+											className="pointer-events-none relative h-full rounded-md bg-purple-300 dark:bg-purple-600"
+											style={{ width: `${percentage.toString()}%` }}
+										/>
+										<div className="pointer-events-none absolute inset-0 flex items-center justify-between p-2">
+											{answer.text}
+											<span>
+												{`${optionVotes.toString()} votes - ${percentage.toFixed(0).toString()}%`}
+											</span>
+										</div>
+									</Button>
+								)
+							})}
 						</CardContent>
 					</Card>
 				)

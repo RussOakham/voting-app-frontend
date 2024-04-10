@@ -23,6 +23,7 @@ import {
 	FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { useToast } from '@/components/ui/use-toast'
 import { useCreatePollMutation } from '@/lib/react-query/polls/mutations/useCreatePollMutation'
 import {
 	CreatePoll as CreatePollType,
@@ -34,6 +35,7 @@ const isDev = import.meta.env.MODE === 'development'
 const CreatePoll: React.FC = () => {
 	const [isPending, startTransition] = useTransition()
 	const navigate = useNavigate()
+	const { toast } = useToast()
 	const createPollMutation = useCreatePollMutation()
 
 	const id1 = uuid()
@@ -60,7 +62,10 @@ const CreatePoll: React.FC = () => {
 		startTransition(() => {
 			createPollMutation.mutate(data, {
 				onError: (error) => {
-					console.error(error)
+					toast({
+						title: 'Error creating poll',
+						description: error.message,
+					})
 				},
 			})
 			navigate('/polls')
