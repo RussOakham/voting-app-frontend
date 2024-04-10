@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { metadataSchema } from './dynamo.type'
+
 const voteSchema = z.object({
 	id: z.string(),
 	option: z.string(),
@@ -39,13 +41,6 @@ export const pollSchema = createPollSchema.extend({
 })
 
 export type Poll = z.infer<typeof pollSchema>
-
-export const metadataSchema = z.object({
-	attempts: z.number(),
-	httpStatusCode: z.number(),
-	requestId: z.string(),
-	totalRetryDelay: z.number(),
-})
 
 export const getPollsSchema = z.object({
 	$metadata: metadataSchema,
