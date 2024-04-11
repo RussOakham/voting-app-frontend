@@ -19,7 +19,7 @@ const router = createBrowserRouter([
 		element: <Root />,
 		children: [
 			{
-				path: '/polls',
+				path: '/',
 				element: <Polls />,
 			},
 			{

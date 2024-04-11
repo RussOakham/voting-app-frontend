@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/components/ui/use-toast'
+import useGetCurrentUser from '@/lib/amplify/useGetCurrentUser'
 import { useCreatePollMutation } from '@/lib/react-query/polls/mutations/useCreatePollMutation'
 import {
 	CreatePoll as CreatePollType,
@@ -37,6 +38,7 @@ const CreatePoll: React.FC = () => {
 	const navigate = useNavigate()
 	const { toast } = useToast()
 	const createPollMutation = useCreatePollMutation()
+	const user = useGetCurrentUser()
 
 	const id1 = uuid()
 	const id2 = uuid()
@@ -50,7 +52,7 @@ const CreatePoll: React.FC = () => {
 				{ id: id2, text: '' },
 			],
 			votes: [],
-			createdBy: 'user-1',
+			createdBy: user?.userId,
 		},
 	})
 	const { fields, append, remove } = useFieldArray({
@@ -83,6 +85,10 @@ const CreatePoll: React.FC = () => {
 		}
 
 		remove(index)
+	}
+
+	if (!user?.userId) {
+		return <div>Not authenticated...</div>
 	}
 
 	return (

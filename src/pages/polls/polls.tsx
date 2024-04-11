@@ -12,6 +12,7 @@ import {
 	CardTitle,
 } from '@/components/ui/card'
 import { useToast } from '@/components/ui/use-toast'
+import useGetCurrentUser from '@/lib/amplify/useGetCurrentUser'
 import { useSubmitVoteMutation } from '@/lib/react-query/polls/mutations/useSubmitVoteMutation'
 import { useGetPollsQuery } from '@/lib/react-query/polls/queries/useGetPollsQuery'
 
@@ -19,6 +20,7 @@ function Polls() {
 	const [isPending, startTransition] = useTransition()
 	const { toast } = useToast()
 	const submitVoteMutation = useSubmitVoteMutation()
+	const user = useGetCurrentUser()
 	const {
 		data: polls,
 		isError,
@@ -32,6 +34,10 @@ function Polls() {
 
 	if (isError) {
 		return <p>Error: {error.message}</p>
+	}
+
+	if (!user?.userId) {
+		return <p>Not authenticated</p>
 	}
 
 	return (
@@ -80,7 +86,7 @@ function Polls() {
 														pollId: option.id,
 														votes: option.votes,
 														submittedVote: {
-															userId: '123',
+															userId: user.userId,
 															optionId: answer.id,
 															optionText: answer.text,
 														},
