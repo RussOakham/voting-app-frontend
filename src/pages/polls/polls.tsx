@@ -40,6 +40,10 @@ function Polls() {
 		return <p>Not authenticated</p>
 	}
 
+	const userHasVoted = polls.some((poll) => {
+		return poll.votes.some((vote) => vote.user === user.userId)
+	})
+
 	return (
 		<Shell variant="default" className="max-w-6xl">
 			<h2 className="text-md font-bold">Add New Poll</h2>
@@ -78,7 +82,7 @@ function Polls() {
 										key={answer.id}
 										variant="vote"
 										className="relative p-0"
-										disabled={isPending}
+										disabled={isPending || userHasVoted}
 										onClick={() => {
 											startTransition(() => {
 												submitVoteMutation.mutate(
@@ -122,6 +126,11 @@ function Polls() {
 									</Button>
 								)
 							})}
+							{userHasVoted ? (
+								<span className="text-center text-sm text-muted-foreground">
+									You have already voted on this poll
+								</span>
+							) : null}
 						</CardContent>
 					</Card>
 				)
