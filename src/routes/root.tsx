@@ -3,8 +3,10 @@ import { Outlet } from 'react-router-dom'
 import MainNav from '@/components/layouts/navigation/main-nav'
 import { Toaster } from '@/components/ui/toaster'
 import useGetCurrentUser from '@/lib/amplify/useGetCurrentUser'
+import useReactQuerySubscription from '@/lib/react-query/useReactQuerySubscription'
 
 function Root() {
+	useReactQuerySubscription()
 	const user = useGetCurrentUser()
 
 	if (!user?.userId) {

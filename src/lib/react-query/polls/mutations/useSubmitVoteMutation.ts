@@ -23,10 +23,5 @@ export const useSubmitVoteMutation = () => {
 		onError: (error) => {
 			return error
 		},
-		onSettled: async () => {
-			await queryClient.invalidateQueries({
-				queryKey: ['polls'],
-			})
-		},
 	})
 }

@@ -18,7 +18,14 @@ import './index.css'
 
 Amplify.configure(amplifyConfig)
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			refetchOnWindowFocus: false,
+			staleTime: Infinity,
+		},
+	},
+})
 
 const router = createBrowserRouter([
 	{

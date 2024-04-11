@@ -16,6 +16,11 @@ import useGetCurrentUser from '@/lib/amplify/useGetCurrentUser'
 import { useSubmitVoteMutation } from '@/lib/react-query/polls/mutations/useSubmitVoteMutation'
 import { useGetPollsQuery } from '@/lib/react-query/polls/queries/useGetPollsQuery'
 
+// TODO: More Granular data controls
+// Refactor each poll card into its own component
+// Pass each poll item to component and feed into react query cache as initial data
+// On vote - emit socket event for individual poll and invalidate cache for that poll
+
 function Polls() {
 	const [isPending, startTransition] = useTransition()
 	const { toast } = useToast()
@@ -82,7 +87,7 @@ function Polls() {
 										key={answer.id}
 										variant="vote"
 										className="relative p-0"
-										disabled={isPending || userHasVoted}
+										disabled={isPending}
 										onClick={() => {
 											startTransition(() => {
 												submitVoteMutation.mutate(
