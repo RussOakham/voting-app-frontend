@@ -59,7 +59,7 @@ const PollCard = ({ initialPollData, user }: PollCardProps) => {
 							key={answer.id}
 							variant="vote"
 							className="relative p-0"
-							disabled={isPending}
+							disabled={isPending || userHasVoted}
 							onClick={() => {
 								startTransition(() => {
 									submitVoteMutation.mutate(

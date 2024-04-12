@@ -8,11 +8,6 @@ import { useGetPollsQuery } from '@/lib/react-query/polls/queries/useGetPollsQue
 
 import PollCard from './components/poll-card'
 
-// TODO: More Granular data controls
-// Refactor each poll card into its own component
-// Pass each poll item to component and feed into react query cache as initial data
-// On vote - emit socket event for individual poll and invalidate cache for that poll
-
 function Polls() {
 	const user = useGetCurrentUser()
 	const {

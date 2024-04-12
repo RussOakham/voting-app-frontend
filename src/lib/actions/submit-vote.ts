@@ -1,29 +1,21 @@
+import Cookies from 'js-cookie'
+
+import { axios } from '@/lib/axios/axios'
 import { SubmitVote } from '@/utils/types/poll.type'
 
 import { endpoints } from '../endpoints'
 
-const { baseUrl, submitVote: submitVoteUrl } = endpoints
+const { submitVote: submitVoteUrl } = endpoints
 
 export const submitVote = async (data: SubmitVote) => {
 	try {
-		const response = await fetch(`${baseUrl}${submitVoteUrl}`, {
-			method: 'POST',
+		const token = Cookies.get('cognito-access-token')
+
+		const response = await axios.post(submitVoteUrl, data, {
 			headers: {
-				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token ?? ''}`,
 			},
-			body: JSON.stringify(data),
 		})
-
-		if (!response.ok) {
-			interface ErrorResponse {
-				message: string
-			}
-
-			const error = await response.text().then((text) => text)
-			const jsonError = JSON.parse(error) as ErrorResponse
-
-			return await Promise.reject(new Error(jsonError.message))
-		}
 
 		return response
 	} catch (err: unknown) {

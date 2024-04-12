@@ -1,26 +1,24 @@
+import Cookies from 'js-cookie'
+
+import { axios } from '@/lib/axios/axios'
 import { CreatePoll as CreatePollType } from '@/utils/types/poll.type'
 
 import { endpoints } from '../endpoints'
 
-const { baseUrl, createPoll: createPollUrl } = endpoints
+const { createPoll: createPollUrl } = endpoints
 
 export const createPoll = async (data: CreatePollType) => {
 	try {
-		const result = await fetch(`${baseUrl}${createPollUrl}`, {
-			method: 'POST',
+		const token = Cookies.get('cognito-access-token')
+
+		const response = await axios.post(createPollUrl, data, {
 			headers: {
-				'Content-Type': 'application/json',
+				Authorization: `Bearer ${token ?? ''}`,
 			},
-			body: JSON.stringify(data),
 		})
 
-		if (!result.ok) {
-			throw new Error('Error creating poll')
-		}
-
-		return result
+		return response
 	} catch (err: unknown) {
-		console.error(err)
 		throw new Error(`Error creating poll: ${JSON.stringify(err)}`)
 	}
 }

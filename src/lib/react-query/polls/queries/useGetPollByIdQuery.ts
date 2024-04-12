@@ -1,30 +1,29 @@
 import { useQuery } from '@tanstack/react-query'
+import Cookies from 'js-cookie'
 
+import { axios } from '@/lib/axios/axios'
 import { endpoints } from '@/lib/endpoints'
 import { zodParse } from '@/utils/helpers/zodParse'
 import { Poll, pollSchema } from '@/utils/types/poll.type'
 
-const { baseUrl, getPolls } = endpoints
+const { getPolls } = endpoints
 
 export const useGetPollByIdQuery = (pollId: string, initialData: Poll) => {
 	const query = useQuery({
 		queryKey: ['poll', pollId],
 		initialData,
 		queryFn: async (): Promise<Poll> => {
-			const response = await fetch(`${baseUrl}${getPolls}/${pollId}`, {
-				method: 'GET',
+			const token = Cookies.get('cognito-access-token')
+
+			const response = await axios.get<Poll>(`${getPolls}/${pollId}`, {
 				headers: {
-					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token ?? ''}`,
 				},
 			})
 
-			if (!response.ok) {
-				throw new Error(`Error fetching poll: ${response.statusText}`)
-			}
+			const { data: poll } = response
 
-			const data = (await response.json()) as Promise<Poll>
-
-			return zodParse(pollSchema, data)
+			return zodParse(pollSchema, poll)
 		},
 	})
 

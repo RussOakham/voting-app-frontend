@@ -8,7 +8,9 @@ export const useCreatePollMutation = () => {
 
 	return useMutation({
 		mutationFn: async (data: CreatePoll) => {
-			await createPoll(data)
+			const response = await createPoll(data)
+
+			return response
 		},
 		onSettled: async () => {
 			await queryClient.invalidateQueries({

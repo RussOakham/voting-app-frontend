@@ -8,7 +8,7 @@ export const useSubmitVoteMutation = () => {
 		mutationFn: async (data: SubmitVote) => {
 			const response = await submitVote(data)
 
-			return response.json()
+			return response
 		},
 		onError: (error) => {
 			return error

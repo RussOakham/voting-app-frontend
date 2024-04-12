@@ -1,5 +1,5 @@
 import { useTransition } from 'react'
-import { useFieldArray, useForm } from 'react-hook-form'
+import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form'
 import { LuMinusCircle, LuPlusCircle } from 'react-icons/lu'
 import { useNavigate } from 'react-router-dom'
 import { DevTool } from '@hookform/devtools'
@@ -60,7 +60,7 @@ const CreatePoll: React.FC = () => {
 		name: 'options',
 	})
 
-	const onSubmit = (data: CreatePollType) => {
+	const onSubmit: SubmitHandler<CreatePollType> = (data: CreatePollType) => {
 		startTransition(() => {
 			createPollMutation.mutate(data, {
 				onError: (error) => {
@@ -70,7 +70,7 @@ const CreatePoll: React.FC = () => {
 					})
 				},
 			})
-			navigate('/polls')
+			navigate('/')
 		})
 	}
 
@@ -104,6 +104,11 @@ const CreatePoll: React.FC = () => {
 				<Form {...form}>
 					<form onSubmit={form.handleSubmit(onSubmit)} className="flex gap-4">
 						<div className="flex w-full flex-col items-center gap-4">
+							<input
+								type="hidden"
+								{...form.register('createdBy')}
+								defaultValue={user.userId}
+							/>
 							<FormField
 								control={form.control}
 								name="question"

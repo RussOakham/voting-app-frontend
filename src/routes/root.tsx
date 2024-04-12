@@ -1,13 +1,26 @@
 import { Outlet } from 'react-router-dom'
+import Cookies from 'js-cookie'
 
 import MainNav from '@/components/layouts/navigation/main-nav'
 import { Toaster } from '@/components/ui/toaster'
+import useGetCurrentSession from '@/lib/amplify/useGetCurrentSession'
 import useGetCurrentUser from '@/lib/amplify/useGetCurrentUser'
 import useReactQuerySubscription from '@/lib/react-query/useReactQuerySubscription'
 
 function Root() {
 	useReactQuerySubscription()
 	const user = useGetCurrentUser()
+	const session = useGetCurrentSession()
+
+	if (session !== null) {
+		Cookies.set(
+			'cognito-access-token',
+			session.tokens?.accessToken.toString() ?? '',
+			{
+				expires: 7,
+			},
+		)
+	}
 
 	if (!user?.userId) {
 		return <div>Not authenticated...</div>
