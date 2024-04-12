@@ -1,4 +1,4 @@
-import { CreatePoll as CreatePollType } from '@/types/poll.type'
+import { CreatePoll as CreatePollType } from '@/utils/types/poll.type'
 
 import { endpoints } from '../endpoints'
 

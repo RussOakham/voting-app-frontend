@@ -1,4 +1,4 @@
-import { SubmitVote } from '@/types/poll.type'
+import { SubmitVote } from '@/utils/types/poll.type'
 
 import { endpoints } from '../endpoints'
 

@@ -20,9 +20,7 @@ const useReactQuerySubscription = () => {
 		})
 
 		websocket.on('message', async (event: SocketPayload) => {
-			console.log('message caught')
 			const queryKey = [event.key, event.id].filter(Boolean)
-			console.log(queryKey)
 			await queryClient.invalidateQueries({ queryKey })
 		})
 

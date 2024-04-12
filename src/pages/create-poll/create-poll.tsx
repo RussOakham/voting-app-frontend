@@ -29,7 +29,7 @@ import { useCreatePollMutation } from '@/lib/react-query/polls/mutations/useCrea
 import {
 	CreatePoll as CreatePollType,
 	createPollSchema,
-} from '@/types/poll.type'
+} from '@/utils/types/poll.type'
 
 const isDev = import.meta.env.MODE === 'development'
 
