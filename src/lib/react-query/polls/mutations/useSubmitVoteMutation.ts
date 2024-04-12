@@ -8,6 +8,10 @@ export const useSubmitVoteMutation = () => {
 		mutationFn: async (data: SubmitVote) => {
 			const response = await submitVote(data)
 
+			if ('error' in response) {
+				throw new Error(response.error)
+			}
+
 			return response
 		},
 		onError: (error) => {

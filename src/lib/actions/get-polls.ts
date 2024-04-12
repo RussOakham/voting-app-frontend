@@ -2,17 +2,16 @@ import axiosOrigin from 'axios'
 import Cookies from 'js-cookie'
 
 import { axios } from '@/lib/axios/axios'
-import { SubmitVote } from '@/utils/types/poll.type'
+import { endpoints } from '@/lib/endpoints'
+import { GetPolls } from '@/utils/types/poll.type'
 
-import { endpoints } from '../endpoints'
+const { getPolls: GetPollsUrl } = endpoints
 
-const { submitVote: submitVoteUrl } = endpoints
-
-export const submitVote = async (data: SubmitVote) => {
+export const getPolls = async () => {
 	try {
 		const token = Cookies.get('cognito-access-token')
 
-		const response = await axios.post(submitVoteUrl, data, {
+		const response = await axios.get<GetPolls>(GetPollsUrl, {
 			headers: {
 				Authorization: `Bearer ${token ?? ''}`,
 			},

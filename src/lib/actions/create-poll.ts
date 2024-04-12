@@ -1,3 +1,4 @@
+import axiosOrigin from 'axios'
 import Cookies from 'js-cookie'
 
 import { axios } from '@/lib/axios/axios'
@@ -19,6 +20,16 @@ export const createPoll = async (data: CreatePollType) => {
 
 		return response
 	} catch (err: unknown) {
-		throw new Error(`Error creating poll: ${JSON.stringify(err)}`)
+		if (axiosOrigin.isAxiosError(err)) {
+			return {
+				error: err.message,
+				status: err.response?.status ?? 500,
+			}
+		}
+
+		return {
+			error: 'An error occurred',
+			status: 500,
+		}
 	}
 }

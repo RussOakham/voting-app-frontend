@@ -52,7 +52,11 @@ const PollCard = ({ initialPollData, user }: PollCardProps) => {
 						(vote) => vote.option === answer.text,
 					).length
 
-					const percentage = (optionVotes / poll.votes.length) * 100
+					let percentage = 0
+
+					if (poll.votes.length > 0) {
+						percentage = (optionVotes / poll.votes.length) * 100
+					}
 
 					return (
 						<Button
