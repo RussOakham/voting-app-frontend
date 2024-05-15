@@ -29,7 +29,7 @@ jobs:
     - name: Label checker for pull requests
       uses: agilepathway/label-checker@v1.6.32
       with:
-        one_of: 'major, minor, patch'
+        one_of: 'major,minor,patch'
         none_of: 'draft'
         repo_token: ${{ secrets.GITHUB_TOKEN }}
 
