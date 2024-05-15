@@ -12,6 +12,7 @@ concurrency:
 
 jobs:
   add_comment:
+    name: Add Comment
     runs-on: ubuntu-latest
     strategy:
       matrix:
