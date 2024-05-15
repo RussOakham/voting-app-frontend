@@ -22,5 +22,5 @@ jobs:
       - name: Add Comment
         uses: mshick/add-pr-comment@v2.8.2
         with:
-          message: Please set a versioning label of either `major`, `minor`, or `patch` to the pull request.
+          message: Please set a versioning label of either `major`, `minor`, or `patch` to the pull request. https://semver.org/
           repo-token: ${{ secrets.GITHUB_TOKEN }}
