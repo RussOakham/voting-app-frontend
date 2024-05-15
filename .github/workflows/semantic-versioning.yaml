@@ -11,16 +11,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  fail-by-label:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Label checker for pull requests
-        uses: agilepathway/label-checker@v1.6.32
-        with:
-          one_of: 'major,minor,patch'
-          none_of: 'draft'
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-
   version-bump-package:
     # Only run if the PR closed by merging
     if: github.event.pull_request.merged == true
