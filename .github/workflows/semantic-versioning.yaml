@@ -1,0 +1,28 @@
+name: Semantic Versioning
+
+on:
+  pull_request:
+    types: [opened, synchronize, labeled, unlabeled, closed]
+    branches:
+      - main
+
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
+jobs:
+  version-bump-package:
+    # Only run if the PR closed by merging
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: copapow/version-bump-package@v1
+        with:
+          default_branch: main
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: EndBug/add-and-commit@v7
+        with:
+          branch: main
+          message: 'Bump package version'
+          push: origin main --force
