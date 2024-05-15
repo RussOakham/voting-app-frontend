@@ -2,7 +2,7 @@ name: Dev - PR Label Check
 
 on:
   pull_request:
-    types: [reopened, labeled, unlabeled]
+    types: [opened, reopened, labeled, unlabeled]
     branches:
       - main
 
