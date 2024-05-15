@@ -4,48 +4,35 @@ on:
   pull_request:
     types: [opened, synchronize, labeled, unlabeled, closed]
     branches:
-    - main
-    # push:
-    #   branches:
-    #   - main
+      - main
 
 concurrency:
   group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
   cancel-in-progress: true
 
 jobs:
-  fail-for-draft:
-    if: contains(github.event.pull_request.labels.*.name, 'draft')
-    runs-on: ubuntu-latest
-    steps:
-    - name: Fail if PR is a draft
-      run: |
-        echo "This PR is currently a draft."
-        exit 1
-
   fail-by-label:
     runs-on: ubuntu-latest
     steps:
-    - name: Label checker for pull requests
-      uses: agilepathway/label-checker@v1.6.32
-      with:
-        one_of: 'major,minor,patch'
-        none_of: 'draft'
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Label checker for pull requests
+        uses: agilepathway/label-checker@v1.6.32
+        with:
+          one_of: 'major,minor,patch'
+          none_of: 'draft'
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
 
   version-bump-package:
     # Only run if the PR closed by merging
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: copapow/version-bump-package@v1
-      with:
-        default_branch: main
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-    - uses: EndBug/add-and-commit@v7
-      with:
-        branch: main
-        message: 'Bump package version'
-        push: origin main --force
-
+      - uses: actions/checkout@v2
+      - uses: copapow/version-bump-package@v1
+        with:
+          default_branch: main
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: EndBug/add-and-commit@v7
+        with:
+          branch: main
+          message: 'Bump package version'
+          push: origin main --force
