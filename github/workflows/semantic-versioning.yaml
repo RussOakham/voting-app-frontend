@@ -1,9 +1,13 @@
 name: Semantic Versioning
 
 on:
-  push:
+  pull_request:
+    types: [opened, synchronize, labeled, unlabeled, closed]
     branches:
     - main
+    # push:
+    #   branches:
+    #   - main
 
 concurrency:
   group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
