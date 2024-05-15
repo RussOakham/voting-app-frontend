@@ -1,8 +1,8 @@
-name: Pull Request Formatting
+name: Dev - PR Open
 
 on:
   pull_request:
-    types: [opened, synchronize, labeled, unlabeled, closed]
+    types: [opened]
     branches:
       - main
 
@@ -11,15 +11,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  fail-by-label:
+  add_comment:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [20.x]
     steps:
-      - name: Label checker for pull requests
-        uses: agilepathway/label-checker@v1.6.32
+      - name: Add Comment
+        uses: mshick/add-pr-comment@v2.8.2
         with:
-          one_of: 'major,minor,patch'
-          none_of: 'draft'
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          message: Please set a versioning label of either `major`, `minor`, or `patch` to the pull request.
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
