@@ -33,12 +33,11 @@ jobs:
       - name: Get Package Version
         id: version
         run: pnpm pkg get version --workspaces=false | tr -d \"
-      - name: Pring Package Version
-        run: echo ${{ steps.version.outputs.version }}
       - name: Run Changelog Builder
         uses: mikepenz/release-changelog-builder-action@v4
         with:
           configuration: changelog-config.json
+          token: ${{ secrets.GH_ORG_PAT }}
 
   add_comment:
     name: Add Comment
