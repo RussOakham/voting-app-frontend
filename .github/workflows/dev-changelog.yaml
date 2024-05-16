@@ -18,6 +18,7 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+          token: ${{ secrets. }}
 
       - name: Get Previous tag
         id: previoustag
@@ -27,7 +28,7 @@ jobs:
         id: generate-release-changelog
         uses: heinrichreimer/github-changelog-generator-action@v2.4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_ORG_PAT }}
           issues: true
           issuesWoLabels: true
           pullRequests: true
@@ -38,6 +39,9 @@ jobs:
         with:
           commit_message: ChangelogÏ ${{ steps.previoustag.outputs.tag }} [skip-ci]
           file_pattern: CHANGELOG.md package.json
+          branch: main
+          push_options: '--force'
+          
 
   release:
     name: Release
