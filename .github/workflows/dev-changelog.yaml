@@ -32,19 +32,11 @@ jobs:
           issuesWoLabels: true
           pullRequests: true
           prWoLabels: true
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 9
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: pnpm
-      - run: pnpm version ${{ steps.previoustag.outputs.tag }} --git-tag-version --allow-same-version false
 
       - name: Commit updates
         uses: stefanzweifel/git-auto-commit-action@v5.0.1
         with:
-          commit_message: Bump ${{ steps.previoustag.outputs.tag }} [skip-ci]
+          commit_message: ChangelogÏ ${{ steps.previoustag.outputs.tag }} [skip-ci]
           file_pattern: CHANGELOG.md package.json
 
   release:
