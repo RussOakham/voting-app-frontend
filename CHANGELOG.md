@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.0.7](https://github.com/RussOakham/voting-app-frontend/tree/v0.0.7) (2024-05-16)
+
+[Full Changelog](https://github.com/RussOakham/voting-app-frontend/compare/v0.0.6...v0.0.7)
+
+**Fixed bugs:**
+
+- chore: Update dev-changelog.yaml to fix changelog workflow [\#12](https://github.com/RussOakham/voting-app-frontend/pull/12) ([RussOakham](https://github.com/RussOakham))
+
 ## [v0.0.6](https://github.com/RussOakham/voting-app-frontend/tree/v0.0.6) (2024-05-16)
 
 [Full Changelog](https://github.com/RussOakham/voting-app-frontend/compare/v0.0.5...v0.0.6)
