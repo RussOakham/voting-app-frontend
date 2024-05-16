@@ -1,0 +1,33 @@
+{
+	"changelog_type": "commit_message",
+	"comment_changelog": true,
+	"include_unlabeled_changes": true,
+	"unlabeled_group_title": "Unlabeled Changes",
+	"exclude_labels": ["draft"],
+	"group_config": [
+		{
+			"title": "Major",
+			"labels": ["major"]
+		},
+		{
+			"title": "Minor",
+			"labels": ["minor"]
+		},
+		{
+			"title": "Patch",
+			"labels": ["patch"]
+		},
+		{
+			"title": "Code Improvements",
+			"labels": ["improvements", "enhancement"]
+		},
+		{
+			"title": "New Features",
+			"labels": ["feature"]
+		},
+		{
+			"title": "Documentation Updates",
+			"labels": ["docs", "documentation", "doc"]
+		}
+	]
+}
