@@ -18,7 +18,7 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-          token: ${{ secrets. }}
+          token: ${{ secrets.GH_ORG_PAT }}
 
       - name: Get Previous tag
         id: previoustag
@@ -37,11 +37,10 @@ jobs:
       - name: Commit updates
         uses: stefanzweifel/git-auto-commit-action@v5.0.1
         with:
-          commit_message: ChangelogÏ ${{ steps.previoustag.outputs.tag }} [skip-ci]
+          commit_message: Changelog ${{ steps.previoustag.outputs.tag }} [skip-ci]
           file_pattern: CHANGELOG.md package.json
           branch: main
           push_options: '--force'
-          
 
   release:
     name: Release
@@ -68,5 +67,7 @@ jobs:
       - name: Create Release
         id: create_release
         uses: elgohr/Github-Release-Action@20240405193535
+        env:
+          GH_TOKEN: ${{ secrets.GH_ORG_PAT }}
         with:
           title: ${{ steps.changelog_reader.outputs.version }}
