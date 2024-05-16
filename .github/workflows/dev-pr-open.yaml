@@ -11,34 +11,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build_changelog:
-    name: Build Changelog
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20.x]
-    outputs:
-      version: ${{ steps.version.outputs.version }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GH_ORG_PAT }}
-      - uses: pnpm/action-setup@v3
-        with:
-          version: 9
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: pnpm
-      - name: Get Package Version
-        id: version
-        run: pnpm pkg get version --workspaces=false | tr -d \"
-      - name: Run Changelog Builder
-        uses: mikepenz/release-changelog-builder-action@v4
-        with:
-          configuration: changelog-config.json
-          token: ${{ secrets.GH_ORG_PAT }}
-
   add_comment:
     name: Add Comment
     permissions: 'write-all'
