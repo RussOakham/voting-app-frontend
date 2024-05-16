@@ -18,7 +18,7 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-          token: ${{ secrets. }}
+          token: ${{ secrets.GH_ORG_PAT }}
 
       - name: Get Previous tag
         id: previoustag
