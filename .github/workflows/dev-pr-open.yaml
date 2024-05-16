@@ -32,7 +32,7 @@ jobs:
           cache: pnpm
       - name: Get Package Version
         id: version
-        run: pnpm pkg get version --workspaces=false | tr -d \" >> "$GITHUB_OUTPUT"
+        run: pnpm pkg get version --workspaces=false | tr -d \"
       - name: Pring Package Version
         run: echo ${{ steps.version.outputs.version }}
       - name: Run Changelog CI
