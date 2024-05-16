@@ -1,10 +1,5 @@
 {
-	"changelog_type": "commit_message",
-	"comment_changelog": true,
-	"include_unlabeled_changes": true,
-	"unlabeled_group_title": "Unlabeled Changes",
-	"exclude_labels": ["draft"],
-	"group_config": [
+	"categories": [
 		{
 			"title": "Major",
 			"labels": ["major"]
@@ -18,7 +13,7 @@
 			"labels": ["patch"]
 		},
 		{
-			"title": "Bug Fixes",
+			"title": "## 🐛 Bug Fixes",
 			"labels": ["bug", "bugfix"]
 		},
 		{
@@ -26,12 +21,25 @@
 			"labels": ["improvements", "enhancement"]
 		},
 		{
-			"title": "New Features",
+			"title": "## 🚀 New Features",
 			"labels": ["feature"]
 		},
 		{
 			"title": "Documentation Updates",
 			"labels": ["docs", "documentation", "doc"]
+		},
+		{
+			"title": "## 🧪 Tests",
+			"labels": ["tests"]
 		}
-	]
+	],
+	"ignore_labels": ["draft"],
+	"tag_resolver": {
+		"method": "semver"
+	},
+	"base_branches": ["main"],
+	"sort": {
+		"order": "ASC",
+		"on_property": "mergedAt"
+	}
 }
