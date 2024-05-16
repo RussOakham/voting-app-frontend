@@ -18,6 +18,10 @@
 			"labels": ["patch"]
 		},
 		{
+			"title": "Bug Fixes",
+			"labels": ["bug", "bugfix"]
+		},
+		{
 			"title": "Code Improvements",
 			"labels": ["improvements", "enhancement"]
 		},
